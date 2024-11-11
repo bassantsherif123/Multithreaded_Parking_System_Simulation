@@ -5,8 +5,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 class ParkingLot {
     private final Semaphore spots;
     private final int totalSpots;
-    private final AtomicInteger totalParked = new AtomicInteger(0);
-    private final AtomicInteger totalServed = new AtomicInteger(0);
+    private int totalParked = 0;
+    private int totalServed = 0;
 //    Semaphore spots;
 
     public ParkingLot(int totalSpots) {
@@ -25,15 +25,15 @@ class ParkingLot {
         }
         spots.Wait(car);
         synchronized (this) {
-            totalParked.incrementAndGet();
+            totalParked++;
             long waitedTime = (System.currentTimeMillis() - waitStartTime) / 1000;
             if (waitedTime == 0) {
                 waitedTime++;
             }
             if (hadToWait) {
-                System.out.println("Car " + car.getCarID() + " from Gate " + car.getGateID() + " parked after waiting " + waitedTime + " units of time. (Parking Status: " + totalParked.get() + " spots occupied)");
+                System.out.println("Car " + car.getCarID() + " from Gate " + car.getGateID() + " parked after waiting " + waitedTime + " units of time. (Parking Status: " + totalParked + " spots occupied)");
             } else {
-                System.out.println("Car " + car.getCarID() + " from Gate " + car.getGateID() + " parked. (Parking Status: " + totalParked.get() + " spots occupied)");
+                System.out.println("Car " + car.getCarID() + " from Gate " + car.getGateID() + " parked. (Parking Status: " + totalParked + " spots occupied)");
             }
         }
 //        if (spots.tryAcquire()) {
@@ -47,25 +47,25 @@ class ParkingLot {
 //            System.out.println("Car " + car.getCarID() + " from Gate " + car.getGateID() + " parked after waiting " + waitedTime + " units of time. (Parking Status: " + totalParked.get() + " spots occupied)");
 //        }
 
-        totalServed.incrementAndGet();
+        totalServed++;
         Thread.sleep((car.getParkDuration()) * 1000 + 100);
 
         leaveCar(car);
     }
     public synchronized void leaveCar(Car car) {
-            totalParked.decrementAndGet();
-            System.out.println("Car " + car.getCarID() + " from Gate " + car.getGateID() + " left after " + car.getParkDuration() + " units of time. (Parking Status: " + totalParked.get() + " spots occupied)");
+            totalParked--;
+            System.out.println("Car " + car.getCarID() + " from Gate " + car.getGateID() + " left after " + car.getParkDuration() + " units of time. (Parking Status: " + totalParked + " spots occupied)");
             spots.Notify();
     }
 
 
 
     public int getTotalCarsParked() {
-        return totalParked.get();
+        return totalParked;
     }
 
     public int getTotalCarsServed() {
-        return totalServed.get();
+        return totalServed;
     }
 
     public void details() {
