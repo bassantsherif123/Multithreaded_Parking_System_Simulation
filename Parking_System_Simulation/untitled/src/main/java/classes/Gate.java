@@ -9,36 +9,25 @@ public class Gate extends Thread {
     private List<Car> cars;
     private int carsServed = 0;
 
+    // Constructor to initialize the gate with its ID and associated parking lot
     public Gate(int gateId, ParkingLot parkingLot) {
         this.gateId = gateId;
         this.parkingLot = parkingLot;
         this.cars = new ArrayList<Car>();
     }
 
+    // Getter for the gate's ID
     public int getGateId() {
         return gateId;
     }
 
-//    @Override
-//    public void run() {
-//        for (Car car : cars) {
-//            System.out.println("Car " + car.getId() + " from Gate " + gateId + " is scheduled.");
-//            car.start();
-//
-//            try {
-//                car.join();
-//                carsServed++;
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
+    // Method to add a car to the list of cars served by this gate
     public void add(Car car) {
         cars.add(car);
         carsServed++;
     }
 
+    // Getter for the number of cars served by this gate
     public int getCarsServed() {
         return carsServed;
     }

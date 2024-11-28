@@ -2,7 +2,7 @@ package classes;
 
 public class Car extends Thread{
     private Gate gate;
-    private final int carID;
+    private final int carID; // Unique identifier for each car
     private final int arriveTime;
     private final int parkingDuration;
     private final ParkingLot parkingLot;
@@ -18,17 +18,10 @@ public class Car extends Thread{
 
     @Override
     public void run(){
-        // “sleep” responds to an interrupt by exiting with an InterruptedException.
+        // Simulate the car arriving at the parking lot after a delay (arriveTime)
         try {
-            Thread.sleep(arriveTime * 1000);
-//            System.out.println("Car " + carID + " from Gate " + getGateID() + " arrived at time " + arriveTime);
-            parkingLot.enter(this);
-
-            // Simulate the time spent parked
-//            Thread.sleep((parkingDuration) * 1000 - 300);
-//
-//            parkingLot.leaveCar(this);
-            // Thread.sleep(parkingDuration * 1000);
+            Thread.sleep(arriveTime * 1000); // Sleep to simulate the car's arrival time
+            parkingLot.enter(this); // Once the car arrives, it enters the parking lot
         }
         catch (InterruptedException e) {
             e.printStackTrace();

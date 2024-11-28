@@ -7,9 +7,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Parser {
-    String inputFile;
+    String inputFile;  // Path to the input file that contains car and gate data
     ArrayList<Gate> gates;
 
+    // Constructor to initialize the parser with the input file path
     public Parser(String file) {
         this.inputFile = file;
         gates = new ArrayList<>();
@@ -31,13 +32,17 @@ public class Parser {
         try (BufferedReader br = new BufferedReader(new FileReader(inputFile))) {
             String line;
             while ((line = br.readLine()) != null) {
+
                 String[] parts = line.trim().split(", ");
+
+                // Parse the values for gate ID, car ID, arrival time, and parking duration
                 int gateID = Integer.parseInt(parts[0].split(" ")[1]);
                 int carID = Integer.parseInt(parts[1].split(" ")[1]);
                 int arriveTime = Integer.parseInt(parts[2].split(" ")[1]);
                 int parkingDuration = Integer.parseInt(parts[3].split(" ")[1]);
 
                 Gate gate = null;
+                // Assign the gate object based on the gate ID
                 switch (gateID) {
                     case 1:
                         gate = g1;
@@ -49,6 +54,8 @@ public class Parser {
                         gate = g3;
                         break;
                 }
+
+                // If a valid gate is found, create a Car object and add it to the gates and cars list
                 if (gate != null) {
                     Car car = new Car(gate, carID, arriveTime, parkingDuration, parkingLot);
                     gate.add(car);
@@ -59,11 +66,9 @@ public class Parser {
         }
         catch (FileNotFoundException e) {
             System.out.println(e);
-            // e.printStackTrace();
         }
         catch (IOException e) {
             System.out.println(e);
-            // e.printStackTrace();
         }
 
         return cars;
